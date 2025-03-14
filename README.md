@@ -1,1 +1,0 @@
-This repository serves as the Help Center for the High School Lesson Plan & Forms Database Management System and the E-learning Web and Mobile Application Software with Student Management System. It provides essential guides and support resources for users of both platforms.
