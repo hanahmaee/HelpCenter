@@ -1,17 +1,38 @@
-import { Inter } from "next/font/google";
+import type { Metadata } from "next";
+import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/components/pages/ThemeProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const nunitoSans = Nunito_Sans({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-nunito-sans",
+});
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "HelpCenter",
-  description: "A simple Next.js app with ShadCN",
+  description: "",
+  icons: "/favicon.ico",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning className={nunitoSans.variable}>
+      <head>
+        <link rel="icon" type="image/png" href="/favicon.png" />
+      </head>
+      <body className={nunitoSans.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

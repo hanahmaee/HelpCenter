@@ -1,7 +1,9 @@
-export default function HomePage() {
+import { Navbar } from '@/components/components/pages/NavBar';
+
+export default function Page() {
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <h1>HELP CENTER ITO HA</h1>
-    </div>
+    <>
+      <Navbar />
+    </>
   );
 }
