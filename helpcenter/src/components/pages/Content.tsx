@@ -20,7 +20,7 @@ export default function GettingStarted() {
       <div className="relative w-full">
         {isVideoPlaying ? (
           <iframe
-            className="w-full h-64 sm:h-96"
+            className="w-full h-[500px] sm:h-[500px]"
             src="https://www.youtube.com/embed/dQw4w9WgXcQ" // Fixed YouTube Embed URL
             title="YouTube video player"
             frameBorder="0"
