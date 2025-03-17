@@ -1,11 +1,11 @@
-import List from '@/components/components/pages/List'
+import Content from '@/components/components/pages/Content'
 import NavBar from '@/components/components/pages/NavBar'
 
 export default function page() {
   return (
     <div>
         < NavBar />
-        < List />   
+        < Content />   
     </div>
   )
 }

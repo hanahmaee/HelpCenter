@@ -1,64 +1,72 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { Card } from '@/components/components/ui/card';
-import { gettingStarted } from '@/components/app/constants/index';
 
-// HelpCard Component
-interface HelpCardProps {
-  title: string;
-  description: string;
-  link: string;
-}
-
-function HelpCard({ title, description, link }: HelpCardProps) {
-  return (
-    <Link href={link} passHref>
-      <Card className="flex items-start p-4 rounded-2xl hover:shadow-md
-        transition-transform hover:scale-105 cursor-pointer w-full max-w-7xl mb-6">
-
-        {/* Image Section */}
-        <div className="w-32 h-20 sm:w-40 sm:h-24 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-          <img
-            src="/path/to/placeholder-image.jpg"
-            alt={title}
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        {/* Text Content + "See Details" Section */}
-        <div className="flex flex-col sm:flex-row flex-1 items-start sm:items-center ml-4">
-          <div className="flex-1">
-            <h3 className="text-4xl sm:text-2xl font-semibold">{title}</h3>
-            <p className="text-lg text-gray-600 mt-2">{description}</p>
-            </div>
-
-            <div className="text-lg font-medium mt-0 sm:mt-2 sm:ml-4 self-end">
-            See Details →
-          </div>
-        </div>
-      </Card>
-    </Link>
-  );
-}
-
-// Main Component
 export default function GettingStarted() {
-  return (
-    <div className="pl-4 sm:pl-10 pt-16 sm:pt-6 flex flex-col items-start w-full ml-0 sm:ml-20">
-      {/* Heading Section */}
-      <h1 className="text-3xl sm:text-4xl font-extrabold mb-8">Getting Started</h1>
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
-      {/* Cards Section */}
-      <div className="space-y-6 w-full">
-        {gettingStarted.map((topic, index) => (
-          <HelpCard
-            key={index}
-            title={topic.title}
-            description={topic.description}
-            link={topic.link}
+  const handlePlayClick = () => {
+    setIsVideoPlaying(true);
+  };
+
+  return (
+    <div className="w-full px-6 lg:px-20 pt-28 sm:pt-22 mx-auto flex flex-col">
+      {/* Heading Section (With Proper Spacing) */}
+      <div className="text-4xl md:text-5xl font-extrabold text-left mb-8">
+        Getting Started
+      </div>
+
+      {/* Video/Image Section */}
+      <div className="relative w-full">
+        {isVideoPlaying ? (
+          <iframe
+            className="w-full h-64 sm:h-96"
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ" // Fixed YouTube Embed URL
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
           />
-        ))}
+        ) : (
+          <>
+            <img
+              src="/path/to/your-image.jpg"
+              alt="Getting Started"
+              className="w-full h-64 sm:h-96 object-cover rounded-lg"
+            />
+            {/* Play Button */}
+            <div className="absolute inset-0 flex justify-center items-center">
+              <button
+                onClick={handlePlayClick}
+                className="bg-black bg-opacity-50 text-white rounded-full p-4 text-3xl"
+              >
+                ▶
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Fallback Button for Non-Embeddable Videos */}
+      {!isVideoPlaying && (
+        <div className="text-center mt-4">
+          <a
+            href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+          </a>
+        </div>
+      )}
+
+      {/* Text Section */}
+      <div className="p-6 sm:p-10">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+          How to create an account?
+        </h2>
+        <p className="text-lg text-gray-600">
+          Learn how to sign up and set up your profile in just a few simple steps.
+        </p>
       </div>
     </div>
   );

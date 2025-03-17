@@ -1,61 +1,68 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
+import { Card } from '@/components/components/ui/card';
+import { gettingStarted } from '@/components/app/constants/index';
+
+// HelpCard Component
+interface HelpCardProps {
+  title: string;
+  description: string;
+  link: string;
+}
+
+function HelpCard({ title, description, link }: HelpCardProps) {
+  return (
+    <Link href={link} passHref>
+      <Card className="flex flex-row items-center p-4 rounded-2xl hover:shadow-md
+        transition-transform hover:scale-105 cursor-pointer w-full max-w-7xl mb-8 h-auto">
+        
+        {/* Image Section */}
+        <div className="w-26 h-20 sm:w-30 sm:h-20 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+          <img
+            src="/path/to/placeholder-image.jpg"
+            alt={title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+      {/* Text + "See Details" Section */}
+      <div className="flex flex-1 flex-col justify-center ml-4 sm:ml-6 w-full">
+        <h3 className="text-lg sm:text-2xl font-semibold">{title}</h3>
+
+        <div className="flex justify-between items-end w-full">
+          <p className="text-sm sm:text-lg">{description}</p>
+          <div className="text-sm sm:text-lg font-medium whitespace-nowrap self-end">
+            See Details →
+          </div>
+        </div>
+      </div>
+      </Card>
+    </Link>
+  );
+}
 
 // Main Component
 export default function GettingStarted() {
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-
-  const handlePlayClick = () => {
-    setIsVideoPlaying(true);
-  };
-
   return (
-    <div className="w-full">
-      {/* Heading Section */}
-      <div className="text-2xl sm:text-3xl font-bold p-4 sm:p-6">
-        Getting Started
+    <div className="px-6 lg:px-20 pt-28 sm:pt-22 mx-auto flex flex-col w-full">
+      {/* Heading Section (Left Aligned) */}
+      <div className="w-full mb-10">
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-left">
+          Getting Started
+        </h1>
       </div>
 
-      {/* Video/Image Section */}
-      <div className="relative w-full">
-        {isVideoPlaying ? (
-          <iframe
-            className="w-full h-64 sm:h-96"
-            src="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
+      {/* Cards Section */}
+      <div className="space-y-8 w-full">
+        {gettingStarted.map((topic, index) => (
+          <HelpCard
+            key={index}
+            title={topic.title}
+            description={topic.description}
+            link={topic.link}
           />
-        ) : (
-          <>
-            <img
-              src="/path/to/your-image.jpg"
-              alt="Getting Started"
-              className="w-full h-64 sm:h-96 object-cover"
-            />
-            {/* Play Button */}
-            <div className="absolute inset-0 flex justify-center items-center">
-              <button
-                onClick={handlePlayClick}
-                className="bg-black bg-opacity-50 text-white rounded-full p-4 text-3xl"
-              >
-                ▶
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* Text Section */}
-      <div className="p-6 sm:p-10">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-          How to create an account?
-        </h2>
-        <p className="text-lg">
-          Learn how to sign up and set up your profile in just a few simple steps.
-        </p>
+        ))}
       </div>
     </div>
   );
