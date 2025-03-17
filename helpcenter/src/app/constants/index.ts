@@ -28,7 +28,7 @@ export const helpTopics = [
       link: '/help/file-management',
     },
     {
-      title: 'Live Classes',
+      title: 'Online Class',
       description:
         'Join live sessions, interact with instructors, access recorded lectures, and enhance your learning experience. Discover the best practices for engaging in real-time virtual classrooms.',
       imgSrc: '/helpcenter/Classes.jpg',
