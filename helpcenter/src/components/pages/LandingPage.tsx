@@ -1,40 +1,44 @@
 'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/components/ui/card';
 import { helpTopics } from '@/components/app/constants/index';
 
-// HelpCard Component
 interface HelpCardProps {
   title: string;
   description: string;
   imgSrc: string;
+  link: string;
 }
 
-function HelpCard({ title, description, imgSrc }: HelpCardProps) {
+function HelpCard({ title, description, imgSrc, link }: HelpCardProps) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/list?title=${encodeURIComponent(title)}`);
+  };
+
   return (
-    <Card className="group cursor-pointer transition-transform hover:shadow-md hover:scale-105 border-gray-200 rounded-2xl p-3">
-      <div className="relative w-full h-40 bg-gray-100 rounded-xl overflow-hidden mx-auto">
-        <img
-          src={imgSrc}
-          alt={title}
-          className="w-full h-full object-cover rounded-xl"
-        />
-      </div>
-      <CardHeader className="p-2 pb-0">
-        <h3 className="font-semibold text-2xl leading-none">{title}</h3>
-      </CardHeader>
-      <CardContent className="p-2 pt-0">
-        <p className="text-base">{description}</p>
-      </CardContent>
-    </Card>
+    <div onClick={handleClick} className="cursor-pointer">
+      <Card className="group transition-transform hover:shadow-md hover:scale-105 border-gray-200 rounded-2xl p-3">
+        <div className="relative w-full h-40 bg-gray-100 rounded-xl overflow-hidden mx-auto">
+          <img src={imgSrc} alt={title} className="w-full h-full object-cover rounded-xl" />
+        </div>
+        <CardHeader className="p-2 pb-0">
+          <h3 className="font-semibold text-2xl leading-none">{title}</h3>
+        </CardHeader>
+        <CardContent className="p-2 pt-0">
+          <p className="text-base">{description}</p>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
-export default function HelpCenter() {
+export default function LandingPage() {
   return (
     <div className="px-6 lg:px-20 py-16 mt-10 mx-auto flex flex-col">
-      {/* Heading Section */}
       <div className="text-center mb-6">
         <h1 className="text-4xl md:text-5xl font-extrabold">
           Need Assistance? We’ve Got You Covered.
@@ -64,6 +68,7 @@ export default function HelpCenter() {
             title={topic.title}
             description={topic.description}
             imgSrc={topic.imgSrc}
+            link={topic.link}
           />
         ))}
       </div>
