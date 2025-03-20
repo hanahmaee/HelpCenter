@@ -1,17 +1,23 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card } from '@/components/components/ui/card';
-import { helpList, helpTopics } from '@/components/app/constants/index';
 
 interface HelpCardProps {
   title: string;
   description: string;
   link: string;
   imgSrc?: string;
+}
+
+interface HelpListItem {
+  list_id: number;
+  list_title: string;
+  list_description: string;
+  image_url: string;
 }
 
 function HelpCard({ title, description, link, imgSrc }: HelpCardProps) {
@@ -45,32 +51,50 @@ function HelpCard({ title, description, link, imgSrc }: HelpCardProps) {
 // Main Component
 export default function HelpList() {
   const searchParams = useSearchParams();
-  const title = searchParams.get('title')?.toLowerCase() ?? ''; // ✅ Fix: Ensure it's always a string
+  const title = searchParams.get('title')?.toLowerCase() ?? '';
+  const [helpList, setHelpList] = useState<HelpListItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const topic = helpTopics.find((t) => t.title.toLowerCase() === title);
+  useEffect(() => {
+    const fetchLists = async () => {
+      try {
+        // Fetch category ID by its title
+        const categoryResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
+        const categories = await categoryResponse.json();
+        const category = categories.find((cat: any) => cat.category_title.toLowerCase() === title);
 
-  if (!topic) {
-    return <div className="text-center text-red-500 text-2xl mt-20">Topic Not Found</div>;
-  }
+        if (category) {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/lists/${category.category_id}`);
+          const data = await response.json();
+          setHelpList(data);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const filteredHelpList = helpList.filter((help) => help.category.toLowerCase() === title);
+    fetchLists();
+  }, [title]);
+
+  if (loading) return <div className="text-center text-xl mt-10">Loading...</div>;
 
   return (
     <div className="px-6 lg:px-20 pt-28 sm:pt-22 mx-auto flex flex-col w-full">
       <div className="w-full mb-10">
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-left">{topic.title}</h1>
-        <p className="text-lg sm:text-xl mt-3">{topic.description}</p>
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-left capitalize">{title}</h1>
       </div>
 
       <div className="w-full flex flex-col space-y-6">
-        {filteredHelpList.length > 0 ? (
-          filteredHelpList.map((help, index) => (
+        {helpList.length > 0 ? (
+          helpList.map((help) => (
             <HelpCard 
-              key={index} 
-              title={help.title} 
-              description={help.description} 
-              link={`/help/${encodeURIComponent(help.title)}`} 
-              imgSrc={help.imgSrc} 
+              key={help.list_id} 
+              title={help.list_title} 
+              description={help.list_description} 
+              link={`/help/${encodeURIComponent(help.list_title)}`} 
+              imgSrc={help.image_url} 
             />
           ))
         ) : (
