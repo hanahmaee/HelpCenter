@@ -7,11 +7,11 @@ import { Card, CardContent, CardHeader } from "@/components/components/ui/card"
 interface HelpCardProps {
   category_id: number
   category_title: string
-  description: string
-  img_src: string
+  category_description: string
+  category_img_src: string
 }
 
-function HelpCard({ category_id, category_title, description, img_src }: HelpCardProps) {
+function HelpCard({ category_id, category_title, category_description, category_img_src }: HelpCardProps) {
   const router = useRouter()
 
   const handleClick = () => {
@@ -23,7 +23,7 @@ function HelpCard({ category_id, category_title, description, img_src }: HelpCar
       <Card className="group transition-transform hover:shadow-md hover:scale-105 border-gray-200 rounded-2xl p-3">
         <div className="relative w-full h-40 bg-gray-100 rounded-xl overflow-hidden mx-auto">
           <img
-            src={img_src || "/placeholder.svg"}
+            src={category_img_src || "/placeholder.svg"}
             alt={category_title}
             className="w-full h-full object-cover rounded-xl"
           />
@@ -32,7 +32,7 @@ function HelpCard({ category_id, category_title, description, img_src }: HelpCar
           <h3 className="font-semibold text-2xl leading-none">{category_title}</h3>
         </CardHeader>
         <CardContent className="p-2 pt-0">
-          <p className="text-base">{description}</p>
+          <p className="text-base">{category_description}</p>
         </CardContent>
       </Card>
     </div>
@@ -89,12 +89,11 @@ export default function LandingPage() {
             key={category.category_id}
             category_id={category.category_id}
             category_title={category.category_title}
-            description={category.category_description}
-            img_src={category.category_img_src}
+            category_description={category.category_description}
+            category_img_src={category.category_img_src}
           />
         ))}
       </div>
     </div>
   )
 }
-
