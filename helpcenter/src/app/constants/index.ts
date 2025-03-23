@@ -88,45 +88,42 @@
 //   },
 // ];
 
-export const helpContent = [
+// constants/index.ts
+
+export interface Step {
+  text: string;
+  img?: string;
+}
+
+export interface ContentData {
+  category: string;
+  videoUrl: string;
+  title: string;
+  description: string;
+  steps: Step[];
+  thumbnail: string;
+}
+
+export const CONTENT_DATA: ContentData[] = [
   {
     category: 'Getting Started',
-    title: 'How to create an account?',
     videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    title: 'Getting Started',
     description: 'Learn how to sign up and set up your profile in just a few simple steps.',
     steps: [
       {
-        text: 'Go to the signup page and enter your email address.',
-        img: '/images/help/signup-step1.png',
+        text: 'Step 1: Create an account',
+        img: '/path/to/step1-image.jpg',
       },
       {
-        text: 'Create a secure password and confirm it.',
-        img: '/images/help/signup-step2.png',
+        text: 'Step 2: Verify your email',
       },
       {
-        text: 'Click "Sign Up" and check your email for verification.',
-        img: '/images/help/signup-step3.png',
+        text: 'Step 3: Complete your profile',
+        img: '/path/to/step3-image.jpg',
       },
     ],
+    thumbnail: '/path/to/thumbnail-image.jpg',
   },
-  {
-    category: 'Billing and Payment',
-    title: 'How do I update my payment method?',
-    videoUrl: 'https://www.youtube.com/embed/example-update-payment',
-    description: 'Learn how to securely update or change your payment details.',
-    steps: [
-      {
-        text: 'Go to "Billing" in your account settings.',
-        img: '/images/help/payment-update1.png',
-      },
-      {
-        text: 'Click "Update Payment Method" and enter your new details.',
-        img: '/images/help/payment-update2.png',
-      },
-      {
-        text: 'Save changes to confirm your new payment method.',
-        img: '/images/help/payment-update3.png',
-      },
-    ],
-  },
+  // Add more content here...
 ];

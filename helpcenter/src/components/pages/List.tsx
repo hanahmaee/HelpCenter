@@ -78,7 +78,7 @@ export default function HelpList() {
     fetchLists();
   }, [title]);
 
-  if (loading) return <div className="text-center text-xl mt-10">Loading...</div>;
+  if (loading) return     <div className="flex items-center justify-center h-screen text-xl"> Loading...</div>;
 
   return (
     <div className="px-6 lg:px-20 pt-28 sm:pt-22 mx-auto flex flex-col w-full">
