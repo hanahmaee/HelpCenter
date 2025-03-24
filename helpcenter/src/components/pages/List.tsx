@@ -19,11 +19,10 @@ interface HelpListItem {
   list_img_url?: string;
 }
 
-
 function HelpCard({ title, description, imgSrc }: HelpCardProps) {
   return (
     <Link href={`/content?title=${encodeURIComponent(title)}`} passHref>
-      <Card className="flex flex-row items-center p-4 rounded-2xl hover:shadow-md transition-transform hover:scale-105 cursor-pointer w-full h-auto">
+      <Card className="flex flex-row items-center p-4 rounded-2xl hover:shadow-md transition-transform hover:scale-105 cursor-pointer w-full h-auto space-x-6">
         <div className="w-24 h-20 sm:w-28 sm:h-24 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
           <Image
             src={imgSrc || "/images/help/placeholder.jpg"}
@@ -34,7 +33,7 @@ function HelpCard({ title, description, imgSrc }: HelpCardProps) {
           />
         </div>
 
-        <div className="flex flex-1 flex-col justify-center ml-4 sm:ml-6 w-full">
+        <div className="flex flex-1 flex-col justify-center">
           <h3 className="text-lg sm:text-2xl font-semibold">{title}</h3>
           <div className="flex justify-between items-end w-full mt-2">
             <p className="text-sm sm:text-lg">{description}</p>
@@ -91,14 +90,16 @@ export default function HelpList() {
       </div>
 
       {helpList.length > 0 ? (
-        helpList.map((help) => (
-          <HelpCard
-            key={help.list_id}
-            title={help.list_title}
-            description={help.list_description}
-            imgSrc={help.list_img_url}
-          />
-        ))
+        <div className="flex flex-col space-y-6">
+          {helpList.map((help) => (
+            <HelpCard
+              key={help.list_id}
+              title={help.list_title}
+              description={help.list_description}
+              imgSrc={help.list_img_url}
+            />
+          ))}
+        </div>
       ) : (
         <p className="text-center text-xl text-gray-500">
           No related help articles found.

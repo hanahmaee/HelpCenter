@@ -75,7 +75,7 @@ export default function Content() {
             <img
               src={selectedContent.thumbnail}
               alt={selectedContent.title}
-              className={`w-full h-48 sm:h-64 md:h-80 lg:h-96 object-cover rounded-lg ${shadowClass}`}
+              className="w-full h-48 sm:h-64 md:h-80 lg:h-96 object-cover rounded-lg"
             />
             <div className="absolute inset-0 flex justify-center items-center">
               <button
@@ -105,16 +105,16 @@ export default function Content() {
               key={index}
               className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 lg:gap-16 items-center"
             >
-              {/* Image Section with Stronger Shadow */}
+              {/* Image Section - Now Fully Responsive */}
               <div className="w-full flex justify-center items-center">
                 {step.img ? (
                   <img
                     src={step.img}
                     alt={step.text}
-                    className={`w-full max-w-sm md:max-w-md h-auto object-contain rounded-lg ${shadowClass}`}
+                    className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto object-contain rounded-lg"
                   />
                 ) : (
-                  <div className={`w-full max-w-sm md:max-w-md h-[150px] sm:h-[200px] md:h-[250px] rounded-lg bg-gray-100 dark:bg-gray-800 ${shadowClass}`}></div>
+                  <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-[150px] sm:h-[200px] md:h-[250px] rounded-lg bg-gray-100 dark:bg-gray-800"></div>
                 )}
               </div>
 
