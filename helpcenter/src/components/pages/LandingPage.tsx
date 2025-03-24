@@ -12,31 +12,32 @@ interface HelpCardProps {
 }
 
 function HelpCard({ category_id, category_title, category_description, category_img_src }: HelpCardProps) {
-  const router = useRouter()
+  const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/list?title=${encodeURIComponent(category_title)}`)
-  }
+    router.push(`/list?title=${encodeURIComponent(category_title)}`);
+  };
 
   return (
-    <div onClick={handleClick} className="cursor-pointer">
-      <Card className="group transition-transform hover:shadow-md hover:scale-105 border-gray-200 rounded-2xl p-3">
-        <div className="relative w-full h-40 bg-gray-100 rounded-xl overflow-hidden mx-auto">
+    <div onClick={handleClick} className="cursor-pointer h-full">
+      <Card className="group transition-transform hover:shadow-md hover:scale-105 border-gray-200 rounded-2xl p-3 h-full flex flex-col">
+        <div className="relative w-full h-40 bg-gray-100 rounded-xl overflow-hidden">
           <img
             src={category_img_src || "/placeholder.svg"}
             alt={category_title}
             className="w-full h-full object-cover rounded-xl"
           />
         </div>
-        <CardHeader className="p-2 pb-0">
-          <h3 className="font-semibold text-2xl leading-none">{category_title}</h3>
+        {/* Tightened spacing between title and description */}
+        <CardHeader className="p-1 pb-0">
+          <div className="space-y-2">
+            <h3 className="font-semibold text-[1.75rem] leading-snug">{category_title}</h3>
+            <p className="text-base">{category_description}</p>
+          </div>
         </CardHeader>
-        <CardContent className="p-2 pt-0">
-          <p className="text-base">{category_description}</p>
-        </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 export default function LandingPage() {
@@ -83,7 +84,7 @@ export default function LandingPage() {
       </div>
 
       {/* Help Topics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
         {filteredCategories.map((category) => (
           <HelpCard
             key={category.category_id}
