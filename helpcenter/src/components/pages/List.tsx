@@ -16,20 +16,21 @@ interface HelpListItem {
   list_id: number;
   list_title: string;
   list_description: string;
-  image_url: string;
+  list_img_url?: string;
 }
+
 
 function HelpCard({ title, description, imgSrc }: HelpCardProps) {
   return (
     <Link href={`/content?title=${encodeURIComponent(title)}`} passHref>
       <Card className="flex flex-row items-center p-4 rounded-2xl hover:shadow-md transition-transform hover:scale-105 cursor-pointer w-full h-auto">
         <div className="w-24 h-20 sm:w-28 sm:h-24 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-          <Image 
-            src={imgSrc || "/images/help/placeholder.jpg"} 
-            alt={title} 
-            width={112} 
-            height={80} 
-            className="w-full h-full object-cover" 
+          <Image
+            src={imgSrc || "/images/help/placeholder.jpg"}
+            alt={title}
+            width={112}
+            height={80}
+            className="w-full h-full object-cover"
           />
         </div>
 
@@ -77,7 +78,7 @@ export default function HelpList() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen text-xl"> 
+      <div className="flex items-center justify-center h-screen text-xl">
         Loading...
       </div>
     );
@@ -89,22 +90,20 @@ export default function HelpList() {
         <h1 className="text-3xl sm:text-5xl font-extrabold text-left capitalize">{title}</h1>
       </div>
 
-      <div className="w-full flex flex-col space-y-6">
-        {helpList.length > 0 ? (
-          helpList.map((help) => (
-            <HelpCard 
-              key={help.list_id} 
-              title={help.list_title} 
-              description={help.list_description} 
-              imgSrc={help.image_url} 
-            />
-          ))
-        ) : (
-          <p className="text-center text-xl text-gray-500">
-            No related help articles found.
-          </p>
-        )}
-      </div>
+      {helpList.length > 0 ? (
+        helpList.map((help) => (
+          <HelpCard
+            key={help.list_id}
+            title={help.list_title}
+            description={help.list_description}
+            imgSrc={help.list_img_url}
+          />
+        ))
+      ) : (
+        <p className="text-center text-xl text-gray-500">
+          No related help articles found.
+        </p>
+      )}
     </div>
   );
 }
