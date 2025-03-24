@@ -9,7 +9,6 @@ import { Card } from '@/components/components/ui/card';
 interface HelpCardProps {
   title: string;
   description: string;
-  link: string;
   imgSrc?: string;
 }
 
@@ -20,9 +19,9 @@ interface HelpListItem {
   image_url: string;
 }
 
-function HelpCard({ title, description, link, imgSrc }: HelpCardProps) {
+function HelpCard({ title, description, imgSrc }: HelpCardProps) {
   return (
-    <Link href={link} passHref>
+    <Link href={`/content?title=${encodeURIComponent(title)}`} passHref>
       <Card className="flex flex-row items-center p-4 rounded-2xl hover:shadow-md transition-transform hover:scale-105 cursor-pointer w-full h-auto">
         <div className="w-24 h-20 sm:w-28 sm:h-24 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
           <Image 
@@ -48,7 +47,6 @@ function HelpCard({ title, description, link, imgSrc }: HelpCardProps) {
   );
 }
 
-// Main Component
 export default function HelpList() {
   const searchParams = useSearchParams();
   const title = searchParams.get('title')?.toLowerCase() ?? '';
@@ -58,7 +56,6 @@ export default function HelpList() {
   useEffect(() => {
     const fetchLists = async () => {
       try {
-        // Fetch category ID by its title
         const categoryResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
         const categories = await categoryResponse.json();
         const category = categories.find((cat: any) => cat.category_title.toLowerCase() === title);
@@ -78,7 +75,13 @@ export default function HelpList() {
     fetchLists();
   }, [title]);
 
-  if (loading) return     <div className="flex items-center justify-center h-screen text-xl"> Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen text-xl"> 
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="px-6 lg:px-20 pt-28 sm:pt-22 mx-auto flex flex-col w-full">
@@ -93,7 +96,6 @@ export default function HelpList() {
               key={help.list_id} 
               title={help.list_title} 
               description={help.list_description} 
-              link={`/help/${encodeURIComponent(help.list_title)}`} 
               imgSrc={help.image_url} 
             />
           ))
