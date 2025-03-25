@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { Card } from '@/components/components/ui/card';
 
 interface HelpCardProps {
+  id: number;
   title: string;
   description: string;
   imgSrc?: string;
@@ -19,9 +20,15 @@ interface HelpListItem {
   list_img_url?: string;
 }
 
-function HelpCard({ title, description, imgSrc }: HelpCardProps) {
+function HelpCard({ title, description, imgSrc, id }: HelpCardProps) {
+  const handleClick = () => {
+    if (id) {
+      localStorage.setItem("selectedListId", id.toString());
+    }
+  };
+
   return (
-    <Link href={`/content?title=${encodeURIComponent(title)}`} passHref>
+    <Link href={`/content`} passHref onClick={handleClick}>
       <Card className="flex flex-row items-center p-4 rounded-2xl hover:shadow-md transition-transform hover:scale-105 cursor-pointer w-full h-auto space-x-6">
         <div className="w-24 h-20 sm:w-28 sm:h-24 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
           <Image
@@ -46,6 +53,7 @@ function HelpCard({ title, description, imgSrc }: HelpCardProps) {
     </Link>
   );
 }
+
 
 export default function HelpList() {
   const searchParams = useSearchParams();
@@ -93,11 +101,12 @@ export default function HelpList() {
         <div className="flex flex-col space-y-6">
           {helpList.map((help) => (
             <HelpCard
-              key={help.list_id}
-              title={help.list_title}
-              description={help.list_description}
-              imgSrc={help.list_img_url}
-            />
+            key={help.list_id}
+            id={help.list_id}
+            title={help.list_title}
+            description={help.list_description}
+            imgSrc={help.list_img_url}
+          />
           ))}
         </div>
       ) : (

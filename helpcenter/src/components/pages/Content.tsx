@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { CONTENT_DATA } from '@/components/app/constants/index';
 import { useTheme } from 'next-themes';
 
 interface Step {
@@ -28,20 +27,65 @@ export default function Content() {
 
   const [selectedContent, setSelectedContent] = useState<ContentData | null>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const [listId, setListId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (title) {
-      const content = CONTENT_DATA.find(
-        item => item.title.toLowerCase().localeCompare(title.toLowerCase(), undefined, { sensitivity: 'base' }) === 0
-      );
-
-      setSelectedContent(content || null);
+    const storedListId = localStorage.getItem('selectedListId');
+    if (storedListId) {
+      setListId(storedListId);
     }
-  }, [title]);
+  }, []);
+
+  useEffect(() => {
+    const fetchInstructions = async () => {
+      if (!listId) return;
+
+      try {
+        const instructionsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/instructions/${listId}`);
+        const instructions = await instructionsResponse.json();
+
+        if (!instructions.length) {
+          console.error('No instructions found');
+          return;
+        }
+
+        const instructionData = instructions[0];
+
+        setSelectedContent({
+          category: instructionData.category_title,
+          videoUrl: instructionData.instruction_video_url || '',
+          title: instructionData.instruction_title,
+          description: instructionData.instruction_description,
+          steps: instructionData.steps.map((step: any, index: number) => ({
+            text: step.steps_description,
+            img: instructionData.pictures[index]?.picture_url || undefined,
+          })),
+          thumbnail: instructionData.instruction_thumbnail || instructionData.pictures[0]?.picture_url || '',
+        });
+      } catch (error) {
+        console.error('Error fetching content:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInstructions();
+  }, [listId]);
+
 
   const handlePlayClick = () => {
     setIsVideoPlaying(true);
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen text-xl">
+        Loading content...
+      </div>
+    );
+  }
 
   if (!selectedContent) {
     return (
