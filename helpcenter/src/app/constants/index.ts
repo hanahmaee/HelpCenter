@@ -92,102 +92,102 @@
 
 // constants/index.ts
 
-export interface Step {
-  text: string;
-  img?: string;
-}
+// export interface Step {
+//   text: string;
+//   img?: string;
+// }
 
-export interface ContentData {
-  category: string;
-  videoUrl: string;
-  title: string;
-  description: string;
-  steps: Step[];
-  thumbnail: string;
-}
+// export interface ContentData {
+//   category: string;
+//   videoUrl: string;
+//   title: string;
+//   description: string;
+//   steps: Step[];
+//   thumbnail: string;
+// }
 
-export const CONTENT_DATA: ContentData[] = [
-  {
-    category: 'Getting Started',
-    videoUrl: 'https://youtube.com/embed/XZrlPWs33Cw',
-    title: 'How to create an account?',
-    description: 'Learn how to sign up and set up your profile in just a few simple steps.',
-    steps: [
-      {
-        text: 'Step 1: Click on the ‘Sign Up’ button to redirect to Sign Up page.',
-        img: '/SignUp1.png',
-      },
-      {
-        text: 'Step 2: Fill up the necessary details to create an account, including: ‘First Name’, ‘Last Name’, ‘Email’, and ‘Password’. After that, agree to the ‘Terms & Condition’ of the system',
-        img: '/SignUp2.png',
-      },
-      {
-        text: 'Step 3: Then, click the ‘Create Account’ button to begin using the platform. Once your account is created, you can start exploring its features through signing in.',
-        img: '/SignUp3.png',
-      },
-    ],
-    thumbnail: '/images/help/signup-thumbnail.jpg',
-  },
-  {
-    category: 'Getting Started',
-    videoUrl: 'https://youtube.com/embed/KXKqG1s3Yto',
-    title: 'How to sign in an account?',
-    description: 'Follow easy steps to securely reset your password if you forget it.',
-    steps: [
-      {
-        text: 'Step 1: Click on "Forgot Password" on the login page.',
-        img: '/images/help/reset-password-step1.jpg',
-      },
-      {
-        text: 'Step 2: Enter your registered email address and submit the request.',
-      },
-      {
-        text: 'Step 3: Check your email for a password reset link and follow the instructions.',
-        img: '/images/help/reset-password-step3.jpg',
-      },
-    ],
-    thumbnail: '/images/help/reset-password-thumbnail.jpg',
-  },
+// export const CONTENT_DATA: ContentData[] = [
+//   {
+//     category: 'Getting Started',
+//     videoUrl: 'https://youtube.com/embed/XZrlPWs33Cw',
+//     title: 'How to create an account?',
+//     description: 'Learn how to sign up and set up your profile in just a few simple steps.',
+//     steps: [
+//       {
+//         text: 'Step 1: Click on the ‘Sign Up’ button to redirect to Sign Up page.',
+//         img: '/SignUp1.png',
+//       },
+//       {
+//         text: 'Step 2: Fill up the necessary details to create an account, including: ‘First Name’, ‘Last Name’, ‘Email’, and ‘Password’. After that, agree to the ‘Terms & Condition’ of the system',
+//         img: '/SignUp2.png',
+//       },
+//       {
+//         text: 'Step 3: Then, click the ‘Create Account’ button to begin using the platform. Once your account is created, you can start exploring its features through signing in.',
+//         img: '/SignUp3.png',
+//       },
+//     ],
+//     thumbnail: '/images/help/signup-thumbnail.jpg',
+//   },
+//   {
+//     category: 'Getting Started',
+//     videoUrl: 'https://youtube.com/embed/KXKqG1s3Yto',
+//     title: 'How to sign in an account?',
+//     description: 'Follow easy steps to securely reset your password if you forget it.',
+//     steps: [
+//       {
+//         text: 'Step 1: Click on "Forgot Password" on the login page.',
+//         img: '/images/help/reset-password-step1.jpg',
+//       },
+//       {
+//         text: 'Step 2: Enter your registered email address and submit the request.',
+//       },
+//       {
+//         text: 'Step 3: Check your email for a password reset link and follow the instructions.',
+//         img: '/images/help/reset-password-step3.jpg',
+//       },
+//     ],
+//     thumbnail: '/images/help/reset-password-thumbnail.jpg',
+//   },
 
 
-  {
-    category: 'Billing and Payment',
-    videoUrl: 'https://www.youtube.com/embed/exampleVideo3',
-    title: 'How to pay a course?',
-    description: 'Learn how to securely update or change your payment details.',
-    steps: [
-      {
-        text: 'Step 1: Go to "Billing" under account settings.',
-        img: '/images/help/payment-step1.jpg',
-      },
-      {
-        text: 'Step 2: Click on "Update Payment Method" and enter new details.',
-      },
-      {
-        text: 'Step 3: Confirm your changes and save them securely.',
-        img: '/images/help/payment-step3.jpg',
-      },
-    ],
-    thumbnail: '/images/help/payment-thumbnail.jpg',
-  },
-  {
-    category: 'Online Classes',
-    videoUrl: 'https://www.youtube.com/embed/exampleVideo4',
-    title: 'How do I join a live class session?',
-    description: 'Access live sessions through the course portal or provided meeting link.',
-    steps: [
-      {
-        text: 'Step 1: Navigate to the "Live Classes" section.',
-        img: '/images/help/live-class-step1.jpg',
-      },
-      {
-        text: 'Step 2: Click on the scheduled class link.',
-      },
-      {
-        text: 'Step 3: Join the session and interact using the chat feature.',
-        img: '/images/help/live-class-step3.jpg',
-      },
-    ],
-    thumbnail: '/images/help/live-class-thumbnail.jpg',
-  },
-];
+//   {
+//     category: 'Billing and Payment',
+//     videoUrl: 'https://www.youtube.com/embed/exampleVideo3',
+//     title: 'How to pay a course?',
+//     description: 'Learn how to securely update or change your payment details.',
+//     steps: [
+//       {
+//         text: 'Step 1: Go to "Billing" under account settings.',
+//         img: '/images/help/payment-step1.jpg',
+//       },
+//       {
+//         text: 'Step 2: Click on "Update Payment Method" and enter new details.',
+//       },
+//       {
+//         text: 'Step 3: Confirm your changes and save them securely.',
+//         img: '/images/help/payment-step3.jpg',
+//       },
+//     ],
+//     thumbnail: '/images/help/payment-thumbnail.jpg',
+//   },
+//   {
+//     category: 'Online Classes',
+//     videoUrl: 'https://www.youtube.com/embed/exampleVideo4',
+//     title: 'How do I join a live class session?',
+//     description: 'Access live sessions through the course portal or provided meeting link.',
+//     steps: [
+//       {
+//         text: 'Step 1: Navigate to the "Live Classes" section.',
+//         img: '/images/help/live-class-step1.jpg',
+//       },
+//       {
+//         text: 'Step 2: Click on the scheduled class link.',
+//       },
+//       {
+//         text: 'Step 3: Join the session and interact using the chat feature.',
+//         img: '/images/help/live-class-step3.jpg',
+//       },
+//     ],
+//     thumbnail: '/images/help/live-class-thumbnail.jpg',
+//   },
+// ];
