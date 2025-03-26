@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card } from '@/components/components/ui/card';
+import { Search } from 'lucide-react';
 
 interface HelpCardProps {
   id: number;
@@ -54,11 +55,11 @@ function HelpCard({ title, description, imgSrc, id }: HelpCardProps) {
   );
 }
 
-
 export default function HelpList() {
   const searchParams = useSearchParams();
   const title = searchParams.get('title')?.toLowerCase() ?? '';
   const [helpList, setHelpList] = useState<HelpListItem[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -83,6 +84,10 @@ export default function HelpList() {
     fetchLists();
   }, [title]);
 
+  const filteredHelpList = helpList.filter((help) =>
+    help.list_title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen text-xl">
@@ -93,24 +98,34 @@ export default function HelpList() {
 
   return (
     <div className="px-6 lg:px-20 pt-28 sm:pt-22 mx-auto flex flex-col w-full">
-      <div className="w-full mb-10">
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-left capitalize">{title}</h1>
+      <div className="w-full mb-6 flex flex-col sm:flex-row justify-between items-center">
+        <h1 className="text-3xl sm:text-5xl font-extrabold capitalize">{title}</h1>
+        <div className="relative w-full sm:w-96 mt-4 sm:mt-0">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search help topics..."
+            className="w-full py-3 pl-10 pr-4 rounded-full bg-secondary border border-primary text-primary"
+          />
+          <Search className="absolute left-3 top-3 text-gray-500" />
+        </div>
       </div>
 
-      {helpList.length > 0 ? (
+      {filteredHelpList.length > 0 ? (
         <div className="flex flex-col space-y-6">
-          {helpList.map((help) => (
+          {filteredHelpList.map((help) => (
             <HelpCard
-            key={help.list_id}
-            id={help.list_id}
-            title={help.list_title}
-            description={help.list_description}
-            imgSrc={help.list_img_url}
-          />
+              key={help.list_id}
+              id={help.list_id}
+              title={help.list_title}
+              description={help.list_description}
+              imgSrc={help.list_img_url}
+            />
           ))}
         </div>
       ) : (
-        <p className="text-center text-xl text-gray-500">
+        <p className="text-center text-xl text-gray-500 mt-10">
           No related help articles found.
         </p>
       )}

@@ -28,7 +28,6 @@ function HelpCard({ category_id, category_title, category_description, category_
             className="w-full h-full object-cover rounded-xl"
           />
         </div>
-        {/* Tightened spacing between title and description */}
         <CardHeader className="p-1 pb-0">
           <div className="space-y-2">
             <h3 className="font-semibold text-[1.75rem] leading-snug">{category_title}</h3>
@@ -59,8 +58,8 @@ export default function LandingPage() {
   }, [])
 
   const filteredCategories = categories.filter((category) =>
-    category.category_title.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+    category.category_title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="px-6 lg:px-20 py-16 mt-10 mx-auto flex flex-col">
@@ -84,17 +83,21 @@ export default function LandingPage() {
       </div>
 
       {/* Help Topics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-        {filteredCategories.map((category) => (
-          <HelpCard
-            key={category.category_id}
-            category_id={category.category_id}
-            category_title={category.category_title}
-            category_description={category.category_description}
-            category_img_src={category.category_img_src}
-          />
-        ))}
-      </div>
+      {filteredCategories.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+          {filteredCategories.map((category) => (
+            <HelpCard
+              key={category.category_id}
+              category_id={category.category_id}
+              category_title={category.category_title}
+              category_description={category.category_description}
+              category_img_src={category.category_img_src}
+            />
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500 text-xl mt-10">No results found.</p>
+      )}
     </div>
   )
 }
