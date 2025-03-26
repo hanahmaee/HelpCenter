@@ -42,6 +42,8 @@ function HelpCard({ category_id, category_title, category_description, category_
 export default function LandingPage() {
   const [categories, setCategories] = useState<HelpCardProps[]>([])
   const [searchQuery, setSearchQuery] = useState("")
+  const [showDropdown, setShowDropdown] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -61,6 +63,12 @@ export default function LandingPage() {
     category.category_title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleSearchSelect = (title: string) => {
+    setSearchQuery(title);
+    setShowDropdown(false);
+    router.push(`/list?title=${encodeURIComponent(title)}`);
+  };
+
   return (
     <div className="px-6 lg:px-20 py-16 mt-10 mx-auto flex flex-col">
       <div className="text-center mb-6">
@@ -68,17 +76,35 @@ export default function LandingPage() {
         <p className="mt-5 text-2xl">Get answers to your questions and step-by-step guides.</p>
       </div>
 
-      {/* Search Bar */}
-      <div className="flex justify-center mb-10">
+      {/* Search Bar with Dropdown */}
+      <div className="flex justify-center mb-10 relative">
         <div className="relative w-full max-w-xl">
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setShowDropdown(e.target.value.length > 0);
+            }}
             placeholder="What do you want to learn?"
             className="w-full py-3 pl-10 pr-4 rounded-full bg-secondary border border-primary text-primary"
           />
           <Search className="absolute left-3 top-3 text-gray-500" />
+          
+          {/* Dropdown Suggestions */}
+          {showDropdown && filteredCategories.length > 0 && (
+            <ul className="absolute z-10 w-full bg-white border border-gray-200 shadow-md rounded-lg mt-1 overflow-hidden">
+              {filteredCategories.map((category) => (
+                <li 
+                  key={category.category_id}
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleSearchSelect(category.category_title)}
+                >
+                  {category.category_title}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
 
