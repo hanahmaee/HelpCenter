@@ -123,15 +123,16 @@ export default function LandingPage() {
   }
 
   const handleSearchSelect = (item: SearchResult) => {
-    setSearchQuery(item.title)
-    setShowDropdown(false)
+    setSearchQuery(item.title);
+    setShowDropdown(false);
 
     if (item.type === "category") {
-      router.push(`/list?title=${encodeURIComponent(item.title)}`)
+      router.push(`/list?title=${encodeURIComponent(item.title)}`);
     } else if (item.type === "list") {
-      router.push(`/content?title=${encodeURIComponent(item.title)}`)
+      localStorage.setItem("selectedListId", item.id.toString());
+      router.push(`/content`);
     }
-  }
+};
 
   return (
     <div className="px-6 lg:px-20 py-16 mt-10 mx-auto flex flex-col">
