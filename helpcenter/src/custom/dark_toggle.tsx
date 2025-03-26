@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
@@ -13,16 +12,7 @@ import {
 } from '@/components/components/ui/dropdown-menu';
 
 export function ModeToggle() {
-  const { setTheme, resolvedTheme } = useTheme(); // Use `resolvedTheme` for accurate detection
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null; // Prevents hydration mismatch
-  }
+  const { setTheme, resolvedTheme } = useTheme(); // ✅ Destructure resolvedTheme
 
   return (
     <DropdownMenu>
