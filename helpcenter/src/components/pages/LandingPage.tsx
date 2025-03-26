@@ -1,8 +1,8 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Search } from "lucide-react"
-import { Card, CardContent, CardHeader } from "@/components/components/ui/card"
+import { Card, CardHeader } from "@/components/components/ui/card"
 
 interface HelpCardProps {
   category_id: number
@@ -11,12 +11,18 @@ interface HelpCardProps {
   category_img_src: string
 }
 
+interface SearchResult {
+  type: "category" | "list"
+  id: number
+  title: string
+}
+
 function HelpCard({ category_id, category_title, category_description, category_img_src }: HelpCardProps) {
-  const router = useRouter();
+  const router = useRouter()
 
   const handleClick = () => {
-    router.push(`/list?title=${encodeURIComponent(category_title)}`);
-  };
+    router.push(`/list?title=${encodeURIComponent(category_title)}`)
+  }
 
   return (
     <div onClick={handleClick} className="cursor-pointer h-full">
@@ -36,14 +42,17 @@ function HelpCard({ category_id, category_title, category_description, category_
         </CardHeader>
       </Card>
     </div>
-  );
+  )
 }
 
 export default function LandingPage() {
   const [categories, setCategories] = useState<HelpCardProps[]>([])
   const [searchQuery, setSearchQuery] = useState("")
-  const [showDropdown, setShowDropdown] = useState(false);
-  const router = useRouter();
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([])
+  const [showDropdown, setShowDropdown] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
+  const router = useRouter()
+  const searchRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -59,15 +68,70 @@ export default function LandingPage() {
     fetchCategories()
   }, [])
 
-  const filteredCategories = categories.filter((category) =>
-    category.category_title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Add click outside listener to close dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowDropdown(false)
+      }
+    }
 
-  const handleSearchSelect = (title: string) => {
-    setSearchQuery(title);
-    setShowDropdown(false);
-    router.push(`/list?title=${encodeURIComponent(title)}`);
-  };
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
+
+  const handleSearch = async (query: string) => {
+    setSearchQuery(query)
+
+    if (query.length > 0) {
+      setShowDropdown(true)
+      setIsSearching(true)
+
+      try {
+        const searchUrl = `${process.env.NEXT_PUBLIC_API_URL}/search?query=${encodeURIComponent(query)}`
+        const response = await fetch(searchUrl)
+
+        if (!response.ok) {
+          throw new Error(`Search API returned status ${response.status}`)
+        }
+
+        const data = await response.json()
+        if (data?.categories && data?.lists) {
+          const results: SearchResult[] = []
+          data.categories.forEach((category: any) => {
+            results.push({ type: "category", id: category.category_id, title: category.category_title })
+          })
+          data.lists.forEach((list: any) => {
+            results.push({ type: "list", id: list.list_id, title: list.list_title })
+          })
+          setSearchResults(results)
+        } else {
+          setSearchResults([])
+        }
+      } catch (error) {
+        console.error("Error fetching search results:", error)
+        setSearchResults([])
+      } finally {
+        setIsSearching(false)
+      }
+    } else {
+      setShowDropdown(false)
+      setSearchResults([])
+    }
+  }
+
+  const handleSearchSelect = (item: SearchResult) => {
+    setSearchQuery(item.title)
+    setShowDropdown(false)
+
+    if (item.type === "category") {
+      router.push(`/list?title=${encodeURIComponent(item.title)}`)
+    } else if (item.type === "list") {
+      router.push(`/content?title=${encodeURIComponent(item.title)}`)
+    }
+  }
 
   return (
     <div className="px-6 lg:px-20 py-16 mt-10 mx-auto flex flex-col">
@@ -76,42 +140,44 @@ export default function LandingPage() {
         <p className="mt-5 text-2xl">Get answers to your questions and step-by-step guides.</p>
       </div>
 
-      {/* Search Bar with Dropdown */}
-      <div className="flex justify-center mb-10 relative">
-        <div className="relative w-full max-w-xl">
+      <div className="flex justify-center mb-10">
+        <div ref={searchRef} className="relative w-full max-w-xl">
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setShowDropdown(e.target.value.length > 0);
-            }}
+            onChange={(e) => handleSearch(e.target.value)}
             placeholder="What do you want to learn?"
             className="w-full py-3 pl-10 pr-4 rounded-full bg-secondary border border-primary text-primary"
           />
           <Search className="absolute left-3 top-3 text-gray-500" />
-          
-          {/* Dropdown Suggestions */}
-          {showDropdown && filteredCategories.length > 0 && (
-            <ul className="absolute z-10 w-full bg-white border border-gray-200 shadow-md rounded-lg mt-1 overflow-hidden">
-              {filteredCategories.map((category) => (
-                <li 
-                  key={category.category_id}
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => handleSearchSelect(category.category_title)}
-                >
-                  {category.category_title}
-                </li>
-              ))}
-            </ul>
+          {showDropdown && (
+            <div className="absolute z-50 w-full bg-white border border-gray-200 shadow-lg rounded-lg mt-1 max-h-60 overflow-y-auto">
+              {isSearching ? (
+                <div className="px-4 py-2 text-gray-500">Searching...</div>
+              ) : searchResults.length > 0 ? (
+                <ul>
+                  {searchResults.map((item, index) => (
+                    <li
+                      key={`${item.type}-${item.id}-${index}`}
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handleSearchSelect(item)}
+                    >
+                      {item.title} <span className="text-gray-500 text-sm">({item.type})</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="px-4 py-2 text-gray-500">No results found.</div>
+              )}
+            </div>
           )}
         </div>
       </div>
 
       {/* Help Topics Grid */}
-      {filteredCategories.length > 0 ? (
+      {categories.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-          {filteredCategories.map((category) => (
+          {categories.map((category) => (
             <HelpCard
               key={category.category_id}
               category_id={category.category_id}
@@ -122,8 +188,9 @@ export default function LandingPage() {
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-500 text-xl mt-10">No results found.</p>
+        <p className="text-center text-gray-500 text-xl mt-10">Loading categories...</p>
       )}
     </div>
   )
 }
+
