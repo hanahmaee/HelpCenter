@@ -24,9 +24,9 @@ export default function Content() {
 
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
-  const titleBgColor = '#000'; // Background color for title
-  const titleTextColor = '#fff'; // Text color for title
-  const videoBgColor = '#000'; // Background color for video
+  const titleBgColor = '#000'; 
+  const titleTextColor = '#fff'; 
+  const videoBgColor = '#000'; 
 
   const [selectedContent, setSelectedContent] = useState<ContentData | null>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
@@ -96,24 +96,29 @@ export default function Content() {
         <div className="relative w-full max-w-4xl mx-auto" style={{ backgroundColor: videoBgColor }}>
           {isVideoPlaying ? (
             <iframe
-              className="w-full h-64 sm:h-80 md:h-96 rounded-lg"
-              src={selectedContent.videoUrl.replace('watch?v=', 'embed/')}
-              title="Video Player"
+              className="w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px] rounded-lg"
+              src={selectedContent.videoUrl}
+              title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
           ) : (
-            <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-lg overflow-hidden cursor-pointer" onClick={handlePlayClick}>
+            <button onClick={handlePlayClick} className="relative w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]">
               <img
                 src={selectedContent.thumbnail}
                 alt={selectedContent.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-lg"
               />
-              <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40">
-                <button className="text-white text-5xl">▶</button>
+              <div className="absolute inset-0 flex justify-center items-center">
+                <div className={`relative flex items-center justify-center rounded-full w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20
+                  ${isDarkMode ? 'bg-white bg-opacity-30' : 'bg-black bg-opacity-60'}`}>
+                  <span className={`${isDarkMode ? 'text-black' : 'text-white'} text-3xl`}>
+                    ▶
+                  </span>
+                </div>
               </div>
-            </div>
+            </button>
           )}
         </div>
       </div>
