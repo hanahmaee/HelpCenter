@@ -1,29 +1,29 @@
-"use client"
-import { useEffect, useState, useRef } from "react"
-import { useRouter } from "next/navigation"
-import { Search } from "lucide-react"
-import { Card, CardHeader } from "@/components/components/ui/card"
-import { useTheme } from "next-themes"
+"use client";
+import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { Search } from "lucide-react";
+import { Card, CardHeader } from "@/components/components/ui/card";
+import { useTheme } from "next-themes";
 
 interface HelpCardProps {
-  category_id: number
-  category_title: string
-  category_description: string
-  category_img_src: string
+  category_id: number;
+  category_title: string;
+  category_description: string;
+  category_img_src: string;
 }
 
 interface SearchResult {
-  type: "category" | "list"
-  id: number
-  title: string
+  type: "category" | "list";
+  id: number;
+  title: string;
 }
 
 function HelpCard({ category_id, category_title, category_description, category_img_src }: HelpCardProps) {
-  const router = useRouter()
+  const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/list?title=${encodeURIComponent(category_title)}`)
-  }
+    router.push(`/list?title=${encodeURIComponent(category_title)}`);
+  };
 
   return (
     <div onClick={handleClick} className="cursor-pointer h-full">
@@ -43,97 +43,97 @@ function HelpCard({ category_id, category_title, category_description, category_
         </CardHeader>
       </Card>
     </div>
-  )
+  );
 }
 
 export default function LandingPage() {
-  const [categories, setCategories] = useState<HelpCardProps[]>([])
-  const [searchQuery, setSearchQuery] = useState("")
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([])
-  const [showDropdown, setShowDropdown] = useState(false)
-  const [isSearching, setIsSearching] = useState(false)
-  const router = useRouter()
-  const searchRef = useRef<HTMLDivElement>(null)
-  const { theme } = useTheme()
+  const [categories, setCategories] = useState<HelpCardProps[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const router = useRouter();
+  const searchRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`)
-        const data = await response.json()
-        setCategories(data)
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
+        const data = await response.json();
+        setCategories(data);
       } catch (error) {
-        console.error("Error fetching categories:", error)
+        console.error("Error fetching categories:", error);
       }
-    }
+    };
 
-    fetchCategories()
-  }, [])
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setShowDropdown(false)
+        setShowDropdown(false);
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleSearch = async (query: string) => {
-    setSearchQuery(query)
+    setSearchQuery(query);
 
     if (query.length > 0) {
-      setShowDropdown(true)
-      setIsSearching(true)
+      setShowDropdown(true);
+      setIsSearching(true);
 
       try {
-        const searchUrl = `${process.env.NEXT_PUBLIC_API_URL}/search?query=${encodeURIComponent(query)}`
-        const response = await fetch(searchUrl)
+        const searchUrl = `${process.env.NEXT_PUBLIC_API_URL}/search?query=${encodeURIComponent(query)}`;
+        const response = await fetch(searchUrl);
 
         if (!response.ok) {
-          throw new Error(`Search API returned status ${response.status}`)
+          throw new Error(`Search API returned status ${response.status}`);
         }
 
-        const data = await response.json()
+        const data = await response.json();
         if (data?.categories && data?.lists) {
-          const results: SearchResult[] = []
+          const results: SearchResult[] = [];
           data.categories.forEach((category: any) => {
-            results.push({ type: "category", id: category.category_id, title: category.category_title })
-          })
+            results.push({ type: "category", id: category.category_id, title: category.category_title });
+          });
           data.lists.forEach((list: any) => {
-            results.push({ type: "list", id: list.list_id, title: list.list_title })
-          })
-          setSearchResults(results)
+            results.push({ type: "list", id: list.list_id, title: list.list_title });
+          });
+          setSearchResults(results);
         } else {
-          setSearchResults([])
+          setSearchResults([]);
         }
       } catch (error) {
-        console.error("Error fetching search results:", error)
-        setSearchResults([])
+        console.error("Error fetching search results:", error);
+        setSearchResults([]);
       } finally {
-        setIsSearching(false)
+        setIsSearching(false);
       }
     } else {
-      setShowDropdown(false)
-      setSearchResults([])
+      setShowDropdown(false);
+      setSearchResults([]);
     }
-  }
+  };
 
   const handleSearchSelect = (item: SearchResult) => {
-    setSearchQuery(item.title)
-    setShowDropdown(false)
+    setSearchQuery(item.title);
+    setShowDropdown(false);
 
     if (item.type === "category") {
-      router.push(`/list?title=${encodeURIComponent(item.title)}`)
+      router.push(`/list?title=${encodeURIComponent(item.title)}`);
     } else if (item.type === "list") {
-      localStorage.setItem("selectedListId", item.id.toString())
-      router.push(`/content`)
+      localStorage.setItem("selectedListId", item.id.toString());
+      router.push(`/content`);
     }
-  }
+  };
 
   return (
     <div className="px-6 lg:px-20 py-16 mt-10 mx-auto flex flex-col">
@@ -153,7 +153,11 @@ export default function LandingPage() {
           />
           <Search className="absolute left-3 top-3" />
           {showDropdown && (
-            <div className={`absolute z-50 w-full border shadow-lg rounded-lg mt-1 max-h-60 overflow-y-auto ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
+            <div
+              className={`absolute z-50 w-full border shadow-lg rounded-lg mt-1 max-h-60 overflow-y-auto ${
+                theme === "dark" ? "bg-black text-white" : "bg-white text-black"
+              }`}
+            >
               {isSearching ? (
                 <div className="px-4 py-2">Searching...</div>
               ) : searchResults.length > 0 ? (
@@ -176,22 +180,22 @@ export default function LandingPage() {
         </div>
       </div>
 
-          {/* Help Topics Grid */}
-          {categories.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-              {categories.map((category) => (
-                <HelpCard
-                  key={category.category_id}
-                  category_id={category.category_id}
-                  category_title={category.category_title}
-                  category_description={category.category_description}
-                  category_img_src={category.category_img_src}
-                />
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-gray-500 text-xl mt-10">Loading categories...</p>
-          )}
+      {/* Help Topics Grid */}
+      {categories.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+          {categories.map((category) => (
+            <HelpCard
+              key={category.category_id}
+              category_id={category.category_id}
+              category_title={category.category_title}
+              category_description={category.category_description}
+              category_img_src={category.category_img_src}
+            />
+          ))}
         </div>
-  )
+      ) : (
+        <p className="text-center text-gray-500 text-xl mt-10">Loading categories...</p>
+      )}
+    </div>
+  );
 }

@@ -10,9 +10,13 @@ const nunitoSans = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "HelpCenter",
+  title: "Courstify Help Center",
   description: "",
-  icons: "/favicon.ico",
+  icons:{
+    icon:["/favicon.ico?v=4"],
+    apple:["/apple-touch-icon.png?v=4"],
+    shortcut:["/apple-touch-icon.png"]
+  },
 };
 
 export default function RootLayout({
