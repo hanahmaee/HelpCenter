@@ -124,12 +124,15 @@ export default function Content() {
       </div>
 
       <div className="p-2">
-        <h2 className="text-xl sm:text-2xl md:text-3xl">{selectedContent.description}</h2>
+      <p className="text-sm italic opacity-50">
+       The systems's theme color and logo may vary depending on the preferences and branding of each organization.
+      </p>
+      <h2 className="p-2 text-xl sm:text-2xl md:text-3xl">{selectedContent.description}</h2>
       </div>
 
       <div className="flex flex-col space-y-6">
         {selectedContent.steps.map((step, index) => (
-          <div key={index} className="flex flex-col md:flex-row items-center gap-12">
+          <div key={index} className="p-2 flex flex-col md:flex-row items-center gap-12">
             {step.img && (
               <img
                 src={step.img}
