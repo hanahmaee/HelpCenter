@@ -1,1 +1,3 @@
-This is a help center for our project 
+# Coursetify Help Center
+
+Website link: https://help.teachtrove.com/
